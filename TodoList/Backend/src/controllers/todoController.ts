@@ -54,5 +54,21 @@ export const updateTodo = async (req: Request, res: Response): Promise<void> => 
     }
 };
 
-
+export const deleteTodo = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const { id } = req.params;
+        const deleteTodo = await Todo.findByIdAndDelete(id);
+        if (!deleteTodo) {
+            res.status(404).json({message: "Todo not found"});
+            return;
+        }
+    } catch (err: unknown) {
+        if (err instanceof Error) {
+            res.status(500).json({ message: err.message });
+        } else {
+            res.status(500).json({ message: "An unknown error occurred"});
+        }
+        
+    }
+};
 
