@@ -33,3 +33,26 @@ export const createTodo = async (req: Request, res: Response): Promise<void> => 
     }
 };
 
+export const updateTodo = async (req: Request, res: Response): Promise<void> => {
+    try  {
+        const { id } = req.params;
+        const update = req.body;
+        const options = { new: true};
+
+        const updatedTodo = await Todo.findByIdAndUpdate(id, update, options);
+        if (!updatedTodo) {
+            res.status(404).json({ message: "Todo not found" });
+            return;
+        }
+        res.json(updatedTodo);
+    } catch (err: unknown) {
+        if(err instanceof Error) {
+            res.status(400).json({ message: err.message });
+        } else {
+            res.status(400).json({ message: "An unknown error occurred" });
+        }
+    }
+};
+
+
+
